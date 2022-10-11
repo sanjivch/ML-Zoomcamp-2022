@@ -1,0 +1,16 @@
+
+FROM svizor/zoomcamp-model:3.9.12-slim
+
+RUN pip install pipenv
+
+WORKDIR /homework
+
+COPY ["Pipfile", "Pipfile.lock", "./"]
+
+RUN pipenv install --system --deploy
+
+COPY ["serve_model.py", "./"]
+
+EXPOSE 5000
+
+ENTRYPOINT ["gunicorn", "--bind=0.0.0.0:5000", "serve_model:app"]
